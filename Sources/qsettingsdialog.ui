@@ -120,7 +120,7 @@
       <string>Use cascade classifier for region detection</string>
      </property>
      <property name="checked">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="Line" name="line">
@@ -254,7 +254,7 @@
        <number>11</number>
       </property>
       <property name="sliderPosition">
-       <number>8</number>
+       <number>7</number>
       </property>
       <property name="tracking">
        <bool>true</bool>
@@ -282,7 +282,7 @@
        </font>
       </property>
       <property name="text">
-       <string>256</string>
+       <string>128</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -317,10 +317,13 @@
        <number>4</number>
       </property>
       <property name="maximum">
-       <number>8</number>
+       <number>7</number>
       </property>
       <property name="value">
-       <number>8</number>
+       <number>7</number>
+      </property>
+      <property name="sliderPosition">
+       <number>7</number>
       </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -351,7 +354,7 @@
        </font>
       </property>
       <property name="text">
-       <string>256</string>
+       <string>128</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -517,11 +520,21 @@
         <family>MS Shell Dlg 2</family>
        </font>
       </property>
+      <property name="dateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2016</year>
+        <month>1</month>
+        <day>1</day>
+       </datetime>
+      </property>
       <property name="date">
        <date>
-        <year>1988</year>
-        <month>8</month>
-        <day>23</day>
+        <year>2016</year>
+        <month>1</month>
+        <day>1</day>
        </date>
       </property>
      </widget>

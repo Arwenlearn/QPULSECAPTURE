@@ -369,7 +369,7 @@ void QImageWidget::updateBreathStrings(qreal breath_rate, qreal snr_value)
 
 void QImageWidget::updateSPO2(qreal value)
 {
-    m_spO2String = QString::number(qRound(value*100));
+    m_spO2String = QString::number(value, 'f', 3);
 }
 
 //-----------------------------------------------------------------------------------

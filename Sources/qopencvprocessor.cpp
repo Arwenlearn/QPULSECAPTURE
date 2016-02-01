@@ -390,7 +390,7 @@ void QOpencvProcessor::rectProcess(const cv::Mat &input)
     m_timeCounter = cv::getTickCount();
     if( area > 0 )
     {
-        cv::rectangle( output , m_cvRect, cv::Scalar(15,250,15));
+        cv::rectangle( output , m_cvRect, cv::Scalar(15,250,15), 2, CV_AA);
         emit dataCollected(red, green, blue, area, m_framePeriod);
 
         unsigned int mass = 0;

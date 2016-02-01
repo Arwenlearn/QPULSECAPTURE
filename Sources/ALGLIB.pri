@@ -1,5 +1,5 @@
 #--------------------------------------ALGLIB---------------------------------
-ALGLIB_DIR = C:/Programming/3rdParties/ALGLIB
+ALGLIB_DIR = C:/Programming/3rdParties/ALGLIB/src
 
 INCLUDEPATH += $${ALGLIB_DIR}
 

@@ -10,9 +10,9 @@ QT +=   core \
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET =    QPULSECAPTURE
+TARGET =    BabyVideoMonitor
 TEMPLATE =  app
-VERSION =   3.0.2.0
+VERSION =   1.0.0.0
 
 DEFINES +=  APP_NAME=\\\"$${TARGET}\\\" \
             APP_VERSION=\\\"$${VERSION}\\\"

@@ -37,6 +37,8 @@ bool QVideoCapture::opendevice(int period) // period should be entered in ms
         {
             deviceFlag = true;
             pt_timer->setInterval( period );
+            m_cvCapture.set( CV_CAP_PROP_FRAME_WIDTH, 1280 );
+            m_cvCapture.set( CV_CAP_PROP_FRAME_HEIGHT, 720 );
             return true;
         }
     }

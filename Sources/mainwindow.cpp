@@ -984,19 +984,19 @@ void MainWindow::startMeasurementsRecord()
         m_measurementsStream.setRealNumberNotation(QTextStream::FixedNotation);
         m_measurementsStream.setRealNumberPrecision(3);
         m_measurementsStream << "QPULSECAPTURE MEASUREMENTS RECORD of " << QDateTime::currentDateTime().toString("dd.MM.yyyy")
-                             << "\nhh:mm:ss\tHeartRate, bpm\tSNR, dB\tBreathRate, rpm\tSNR, dB\n";
-        connect(pt_harmonicProcessor, SIGNAL(measurementsUpdated(qreal,qreal,qreal,qreal)), this, SLOT(updateMeasurementsRecord(qreal,qreal,qreal,qreal)));
+                             << "\nhh:mm:ss\tHeartRate, bpm\tSNR, dB\tBreathRate, rpm\tSNR, dB\tspO2, r.u.\n";
+        connect(pt_harmonicProcessor, SIGNAL(measurementsUpdated(qreal,qreal,qreal,qreal,qreal)), this, SLOT(updateMeasurementsRecord(qreal,qreal,qreal,qreal, qreal)));
     }
 }
 
-void MainWindow::updateMeasurementsRecord(qreal heartRate, qreal heartSNR, qreal breathRate, qreal breathSNR)
+void MainWindow::updateMeasurementsRecord(qreal heartRate, qreal heartSNR, qreal breathRate, qreal breathSNR, qreal spo2)
 {
     if(m_measurementsFile.isOpen())
     {
         m_measurementsStream << QTime::currentTime().toString("hh:mm:ss")
                              << "\t" << qRound(heartRate) << "\t"
                              << heartSNR << "\t" << qRound(breathRate)
-                             << "\t" << breathSNR << "\n";
+                             << "\t" << breathSNR << "\t" << spo2 << "\n";
     }
 }
 

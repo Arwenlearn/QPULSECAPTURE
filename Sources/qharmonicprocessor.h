@@ -6,7 +6,7 @@
 #include "ap.h" // ALGLIB types
 #include "dataanalysis.h" // ALGLIB functions
 
-#define BOTTOM_LIMIT 0.7 // in s^-1, it is 42 bpm
+/*#define BOTTOM_LIMIT 0.7 // in s^-1, it is 42 bpm
 #define TOP_LIMIT 4.5 // in s^-1, it is 270 bpm
 #define SNR_TRESHOLD 2.0 // in most cases this value is suitable when (m_BufferLength == 256)
 #define HALF_INTERVAL 2 // defines the number of averaging indexes when frequency is evaluated, this value should be >= 1
@@ -21,14 +21,30 @@
 #define DEFAULT_NORMALIZATION_INTERVAL 15
 #define DEFAULT_BREATH_NORMALIZATION_INTERVAL 36
 #define DEFAULT_BREATH_AVERAGE 26
-#define DEFAULT_BREATH_STROBE 2
+#define DEFAULT_BREATH_STROBE 2*/
 
+#define BOTTOM_LIMIT 1.5 // in s^-1, it is 42 bpm
+#define TOP_LIMIT 3.0 // in s^-1, it is 270 bpm
+#define SNR_TRESHOLD 5.0 // in most cases this value is suitable when (m_BufferLength == 256)
+#define HALF_INTERVAL 2 // defines the number of averaging indexes when frequency is evaluated, this value should be >= 1
+#define DIGITAL_FILTER_LENGTH 5 // in counts
+
+#define BREATH_TOP_LIMIT 1.0 // in s^-1, it is 60 rpm
+#define BREATH_BOTTOM_LIMIT 0.2 // in s^-1, it is 12 rpm
+#define BREATH_HALF_INTERVAL 2 // it will be (value * 2 + 1)
+#define BREATH_SNR_TRESHOLD 5.0
+
+#define PRUNING_SKO_COEFF 3
+#define DEFAULT_NORMALIZATION_INTERVAL 13
+#define DEFAULT_BREATH_NORMALIZATION_INTERVAL 36
+#define DEFAULT_BREATH_AVERAGE 26
+#define DEFAULT_BREATH_STROBE 4
 
 class QHarmonicProcessor : public QObject
 {
     Q_OBJECT
 public:
-    explicit QHarmonicProcessor(QObject *parent = NULL, quint16 length_of_data = 256, quint16 length_of_buffer = 256 );
+    explicit QHarmonicProcessor(QObject *parent = NULL, quint16 length_of_data = 128, quint16 length_of_buffer = 128 );
     ~QHarmonicProcessor();
     enum ColorChannel { Red, Green, Blue, RGB, Experimental };
     enum XMLparserError { NoError, FileOpenError, FileExistanceError, ReadError, ParseFailure };
@@ -56,7 +72,7 @@ signals:
     void breathRateUpdated(qreal freq_value, qreal snr_value);
     void breathTooNoisy(qreal snr_value);
     void breathSnrUpdated(quint32 id, qreal snr_value);
-    void measurementsUpdated(qreal heart_rate, qreal heart_snr, qreal breath_rate, qreal breath_snr);
+    void measurementsUpdated(qreal heart_rate, qreal heart_snr, qreal breath_rate, qreal breath_snr, qreal spo2);
 
     void spO2Updated(const qreal value);
 

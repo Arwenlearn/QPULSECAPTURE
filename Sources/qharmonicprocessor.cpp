@@ -443,7 +443,7 @@ void QHarmonicProcessor::computeHeartRate()
 
     if(m_HeartSNR > SNR_TRESHOLD)
     {
-        m_HeartRate = (power_multiplyed_by_index / signal_power) * 60000.0 / buffer_duration;
+        m_HeartRate = (m_HeartRate + (power_multiplyed_by_index / signal_power) * 60000.0 / buffer_duration) / 2.0;
         if((m_HeartRate <= m_rightTreshold) && (m_HeartRate >= m_leftThreshold))
             emit heartRateUpdated(m_HeartRate, m_HeartSNR, true);
         else
@@ -463,6 +463,7 @@ void QHarmonicProcessor::computeHeartRate()
     else
         emit amplitudeUpdated(m_ID, 10*signal_power);
 
+    emit measurementsUpdated(m_HeartRate, m_HeartSNR, m_BreathRate, m_BreathSNR, m_SPO2);
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -719,15 +720,13 @@ void QHarmonicProcessor::computeBreathRate()
 
     if(m_BreathSNR > BREATH_SNR_TRESHOLD)
     {
-        m_BreathRate = (power_x_index / signal_power) * 60000.0 / duration;
+        m_BreathRate = (m_BreathRate + (power_x_index / signal_power) * 60000.0 / duration) /2.0;
         emit breathRateUpdated(m_BreathRate, m_BreathSNR);
     }
     else
     {
        emit breathTooNoisy(m_BreathSNR);
-    }
-
-    emit measurementsUpdated(m_HeartRate, m_HeartSNR, m_BreathRate, m_BreathSNR);
+    }    
 }
 
 //------------------------------------------------------------------------------------------------
@@ -824,10 +823,13 @@ void QHarmonicProcessor::computeSPO2(quint16 index)
         acRed /= (2 * HALF_INTERVAL + 1);
         acBlue /= (2 * HALF_INTERVAL + 1);*/
         //m_SPO2 = (acRed * dcBlue)/(acBlue*dcRed);
-        m_SPO2 = ((0.93 + 1.0 * (acRed * dcBlue)/(acBlue*dcRed)) + m_SPO2) / 2.0;
+        /*m_SPO2 = ((0.93 + 1.0 * (acRed * dcBlue)/(acBlue*dcRed)) + m_SPO2) / 2.0;
         if(m_SPO2 > 0.98)
-            m_SPO2 = 0.98;
+            m_SPO2 = 0.98;*/
+        m_SPO2 = (acRed * dcBlue)/(acBlue*dcRed);
+        m_SPO2 = std::log(acBlue)/std::log(acRed);
         emit spO2Updated(m_SPO2);
+
     }
 }
 
