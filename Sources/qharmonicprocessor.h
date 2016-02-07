@@ -6,9 +6,9 @@
 #include "ap.h" // ALGLIB types
 #include "dataanalysis.h" // ALGLIB functions
 
-/*#define BOTTOM_LIMIT 0.7 // in s^-1, it is 42 bpm
-#define TOP_LIMIT 4.5 // in s^-1, it is 270 bpm
-#define SNR_TRESHOLD 2.0 // in most cases this value is suitable when (m_BufferLength == 256)
+/*#define BOTTOM_LIMIT 0.8 // in s^-1, it is 48 bpm
+#define TOP_LIMIT 3.0 // in s^-1, it is 180 bpm
+#define SNR_TRESHOLD 3.0 // in most cases this value is suitable when (m_BufferLength == 256)
 #define HALF_INTERVAL 2 // defines the number of averaging indexes when frequency is evaluated, this value should be >= 1
 #define DIGITAL_FILTER_LENGTH 5 // in counts
 
@@ -21,10 +21,10 @@
 #define DEFAULT_NORMALIZATION_INTERVAL 15
 #define DEFAULT_BREATH_NORMALIZATION_INTERVAL 36
 #define DEFAULT_BREATH_AVERAGE 26
-#define DEFAULT_BREATH_STROBE 2*/
+#define DEFAULT_BREATH_STROBE 3*/
 
-#define BOTTOM_LIMIT 1.5 // in s^-1, it is 42 bpm
-#define TOP_LIMIT 3.0 // in s^-1, it is 180 bpm
+#define BOTTOM_LIMIT 1.25 // in s^-1, it is 75 bpm
+#define TOP_LIMIT 3.25 // in s^-1, it is 195 bpm
 #define SNR_TRESHOLD 4.0 // in most cases this value is suitable when (m_BufferLength == 256)
 #define HALF_INTERVAL 2 // defines the number of averaging indexes when frequency is evaluated, this value should be >= 1
 #define DIGITAL_FILTER_LENGTH 5 // in counts
@@ -36,9 +36,9 @@
 
 #define PRUNING_SKO_COEFF 3
 #define DEFAULT_NORMALIZATION_INTERVAL 13
-#define DEFAULT_BREATH_NORMALIZATION_INTERVAL 11
+#define DEFAULT_BREATH_NORMALIZATION_INTERVAL 15
 #define DEFAULT_BREATH_AVERAGE 13
-#define DEFAULT_BREATH_STROBE 2
+#define DEFAULT_BREATH_STROBE 3
 
 class QHarmonicProcessor : public QObject
 {
