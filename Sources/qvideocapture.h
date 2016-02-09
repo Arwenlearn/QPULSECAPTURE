@@ -110,7 +110,7 @@ private:
     bool deviceFlag;                        // this flag should to show when frames are grabbing from video device [true] and when from video file [false] (I was using it for settings and resolution dialogs, which can't be called for video files playback)
     int device_id;                          // stores the curent device identifier, 0 on default    
     int m_frameCounter;                     // stores vurrent number of frame in video file
-
+    double  m_valueShift;
 private slots:
     bool read_frame();                      // calls cv::VideoCapture::read()
 };

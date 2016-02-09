@@ -44,7 +44,7 @@ class QHarmonicProcessor : public QObject
 {
     Q_OBJECT
 public:
-    explicit QHarmonicProcessor(QObject *parent = NULL, quint16 length_of_data = 128, quint16 length_of_buffer = 128 );
+    explicit QHarmonicProcessor(QObject *parent = NULL, quint16 length_of_data = 156, quint16 length_of_buffer = 156);
     ~QHarmonicProcessor();
     enum ColorChannel { Red, Green, Blue, RGB, Experimental };
     enum XMLparserError { NoError, FileOpenError, FileExistanceError, ReadError, ParseFailure };

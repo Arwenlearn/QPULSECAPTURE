@@ -100,12 +100,13 @@ bool QVideoCapture::pause()
 bool QVideoCapture::read_frame()
 {
     if( ( m_cvCapture.read(m_frame) ) && ( !m_frame.empty() ) )
-    {
-        emit frame_was_captured(m_frame);
+    {        
         if(!deviceFlag)
         {
+            m_frame.convertTo(m_frame, -1, 1.0, m_valueShift);
             emit capturedFrameNumber((int)m_cvCapture.get(CV_CAP_PROP_POS_FRAMES));
         }
+        emit frame_was_captured(m_frame);
         return true;
     }
     else
@@ -188,8 +189,7 @@ bool QVideoCapture::open_resolutionDialog()
 
 bool QVideoCapture::open_settingsDialog()
 {
-    if (m_cvCapture.isOpened() && deviceFlag)
-    {
+    if (m_cvCapture.isOpened())   {
     //DIALOG CONSTRUCTION//
     QDialog dialog;
     dialog.setFixedSize(256,320);
@@ -381,7 +381,12 @@ QVideoCapture::~QVideoCapture()
 
 bool QVideoCapture::set_brightness(int value)
 {
-    return m_cvCapture.set(CV_CAP_PROP_BRIGHTNESS, (double)value);
+    if(deviceFlag)
+        return m_cvCapture.set(CV_CAP_PROP_BRIGHTNESS, (double)value);
+    else {
+        m_valueShift = (double)value;
+        return true;
+    }
 }
 
 bool QVideoCapture::set_contrast(int value)
