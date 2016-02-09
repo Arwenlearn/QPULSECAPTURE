@@ -957,7 +957,7 @@ void MainWindow::startMeasurementsRecord()
     {
         m_measurementsFile.close();
         pt_measRecAct->setChecked(false);
-        disconnect(pt_harmonicProcessor, SIGNAL(measurementsUpdated(qreal,qreal,qreal,qreal)), this, SLOT(updateMeasurementsRecord(qreal,qreal,qreal,qreal)));
+        disconnect(pt_harmonicProcessor, SIGNAL(measurementsUpdated(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)), this, SLOT(updateMeasurementsRecord(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)));
         QMessageBox msgBox(QMessageBox::Question, this->windowTitle(), tr("Another record?"), QMessageBox::Yes | QMessageBox::No, this, Qt::Dialog);
         if(msgBox.exec() == QMessageBox::No)
         {
@@ -984,19 +984,23 @@ void MainWindow::startMeasurementsRecord()
         m_measurementsStream.setRealNumberNotation(QTextStream::FixedNotation);
         m_measurementsStream.setRealNumberPrecision(3);
         m_measurementsStream << "QPULSECAPTURE MEASUREMENTS RECORD of " << QDateTime::currentDateTime().toString("dd.MM.yyyy")
-                             << "\nhh:mm:ss\tHeartRate, bpm\tSNR, dB\tBreathRate, rpm\tSNR, dB\tspO2, r.u.\n";
-        connect(pt_harmonicProcessor, SIGNAL(measurementsUpdated(qreal,qreal,qreal,qreal,qreal)), this, SLOT(updateMeasurementsRecord(qreal,qreal,qreal,qreal, qreal)));
+                             << "\nhh:mm:ss\tHeartRate, bpm\tSNR, dB\tBreathRate, rpm\tSNR, dB\tacR\tdcR\tacG\tdcG\tacB\tdcB\n";
+        connect(pt_harmonicProcessor, SIGNAL(measurementsUpdated(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)), this, SLOT(updateMeasurementsRecord(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)));
     }
 }
 
-void MainWindow::updateMeasurementsRecord(qreal heartRate, qreal heartSNR, qreal breathRate, qreal breathSNR, qreal spo2)
+void MainWindow::updateMeasurementsRecord(qreal heartRate, qreal heartSNR, qreal breathRate, qreal breathSNR, qreal acR, qreal dcR, qreal acG, qreal dcG, qreal acB, qreal dcB)
 {
     if(m_measurementsFile.isOpen())
     {
         m_measurementsStream << QTime::currentTime().toString("hh:mm:ss")
                              << "\t" << qRound(heartRate) << "\t"
                              << heartSNR << "\t" << qRound(breathRate)
-                             << "\t" << breathSNR << "\t" << spo2 << "\n";
+                             << "\t" << breathSNR << "\t"
+                             << acR << "\t" << dcR << "\t"
+                             << acG << "\t" << dcG << "\t"
+                             << acB << "\t" << dcB << "\t"
+                             <<  "\n";
     }
 }
 

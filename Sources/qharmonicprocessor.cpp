@@ -55,9 +55,14 @@ QHarmonicProcessor::QHarmonicProcessor(QObject *parent, quint16 length_of_data, 
     v_BlueForFFT = new qreal[m_BufferLength];
     v_BlueSpectrum = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (m_BufferLength/2 + 1));
     m_BluePlan = fftw_plan_dft_r2c_1d(m_BufferLength, v_BlueForFFT, v_BlueSpectrum, FFTW_ESTIMATE);
+
     v_RedForFFT = new qreal[m_BufferLength];
     v_RedSpectrum = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (m_BufferLength/2 + 1));
     m_RedPlan = fftw_plan_dft_r2c_1d(m_BufferLength, v_RedForFFT, v_RedSpectrum, FFTW_ESTIMATE);
+
+    v_GreenForFFT = new qreal[m_BufferLength];
+    v_GreenSpectrum = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (m_BufferLength/2 + 1));
+    m_GreenPlan = fftw_plan_dft_r2c_1d(m_BufferLength, v_GreenForFFT, v_GreenSpectrum, FFTW_ESTIMATE);
 
     // Vectors initialization
     for (quint16 i = 0; i < m_DataLength; i++)
@@ -121,6 +126,9 @@ QHarmonicProcessor::~QHarmonicProcessor()
     delete[] v_RedForFFT;
     fftw_destroy_plan(m_RedPlan);
     fftw_free(v_RedSpectrum);
+    delete[] v_GreenForFFT;
+    fftw_destroy_plan(m_GreenPlan);
+    fftw_free(v_GreenSpectrum);
 }
 
 //----------------------------------------------------------------------------------------------------------
@@ -448,7 +456,7 @@ void QHarmonicProcessor::computeHeartRate()
             emit heartRateUpdated(m_HeartRate, m_HeartSNR, true);
         else
             emit heartRateUpdated(m_HeartRate, m_HeartSNR, false);
-        computeSPO2(index_of_maxpower);
+        computeSPO2( power_multiplyed_by_index / signal_power );
     }
     else
        emit heartTooNoisy(m_HeartSNR);
@@ -463,7 +471,7 @@ void QHarmonicProcessor::computeHeartRate()
     else
         emit amplitudeUpdated(m_ID, 10*signal_power);
 
-    emit measurementsUpdated(m_HeartRate, m_HeartSNR, m_BreathRate, m_BreathSNR, m_SPO2);
+    emit measurementsUpdated(m_HeartRate, m_HeartSNR, m_BreathRate, m_BreathSNR, m_acRed, m_dcRed, m_acGreen, m_dcGreen, m_acBlue, m_dcBlue);
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -789,47 +797,53 @@ void QHarmonicProcessor::setPruning(bool value)
 
 //------------------------------------------------------------------------------------------------
 
-void QHarmonicProcessor::computeSPO2(quint16 index)
+void QHarmonicProcessor::computeSPO2(qreal rIndex)
 {
-    if( (HALF_INTERVAL < index) && (index < (m_BufferLength/2 + 1 - HALF_INTERVAL)) && (m_HeartSNR > 5.0) )
-    {
-        qint16 position = curpos - 1;
+
+    if((HALF_INTERVAL < rIndex) && (rIndex < (m_BufferLength/2 + 1 - HALF_INTERVAL))) {
         quint16 pos;
+        int leftIndex = (int)rIndex;
         for(quint16 i = 0; i < m_BufferLength; i++)
         {
-            pos = loopBuffer(position - i);
-            v_BlueForFFT[i] = PCA_RAW_RGB(pos,1);
+            pos = loopBuffer(curpos - i);
+            v_GreenForFFT[i] = PCA_RAW_RGB(pos,1);
+            v_BlueForFFT[i] = PCA_RAW_RGB(pos,2);
             v_RedForFFT[i] = PCA_RAW_RGB(pos,0);
         }
         fftw_execute(m_BluePlan);
         fftw_execute(m_RedPlan);
-        qreal dcRed = v_RedSpectrum[0][0]*v_RedSpectrum[0][0] + v_RedSpectrum[0][1]*v_RedSpectrum[0][1];
-        qreal acRed = v_RedSpectrum[index][0]*v_RedSpectrum[index][0] + v_RedSpectrum[index][1]*v_RedSpectrum[index][1];
-        qreal dcBlue = v_BlueSpectrum[0][0]*v_BlueSpectrum[0][0] + v_BlueSpectrum[0][1]*v_BlueSpectrum[0][1];
-        qreal acBlue = v_BlueSpectrum[index][0]*v_BlueSpectrum[index][0] + v_BlueSpectrum[index][1]*v_BlueSpectrum[index][1];
-        /*for(quint16 i = 0; i < HALF_INTERVAL; i++)
-        {
-            dcRed += v_RedSpectrum[i][0]*v_RedSpectrum[i][0] + v_RedSpectrum[i][1]*v_RedSpectrum[i][1];
-            dcBlue += v_BlueSpectrum[i][0]*v_BlueSpectrum[i][0] + v_BlueSpectrum[i][1]*v_BlueSpectrum[i][1];
-        }
-        dcRed /= HALF_INTERVAL;
-        dcBlue /= HALF_INTERVAL;
+        fftw_execute(m_GreenPlan);
 
-        for(quint16 i = (index - HALF_INTERVAL); i <= (index + HALF_INTERVAL); i++)
-        {
-            acRed += v_RedSpectrum[i][0]*v_RedSpectrum[i][0] + v_RedSpectrum[i][1]*v_RedSpectrum[i][1];
-            acBlue += v_BlueSpectrum[i][0]*v_BlueSpectrum[i][0] + v_BlueSpectrum[i][1]*v_BlueSpectrum[i][1];
-        }
-        acRed /= (2 * HALF_INTERVAL + 1);
-        acBlue /= (2 * HALF_INTERVAL + 1);*/
+        qreal amplitudeLeft = std::sqrt(v_RedSpectrum[leftIndex][0]*v_RedSpectrum[leftIndex][0] + v_RedSpectrum[leftIndex][1]*v_RedSpectrum[leftIndex][1]);
+        qreal amplitudeRight = std::sqrt(v_RedSpectrum[leftIndex+1][0]*v_RedSpectrum[leftIndex+1][0] + v_RedSpectrum[leftIndex+1][1]*v_RedSpectrum[leftIndex+1][1]);
+        qreal delta = amplitudeRight - amplitudeLeft;
+        m_dcRed = std::sqrt(v_RedSpectrum[0][0]*v_RedSpectrum[0][0] + v_RedSpectrum[0][1]*v_RedSpectrum[0][1]);
+        if(delta > 0.0)
+            m_acRed = amplitudeLeft + delta * (rIndex - leftIndex);
+        else
+            m_acRed = amplitudeRight + std::abs(delta) * (leftIndex + 1 - rIndex);
+
+        amplitudeLeft = std::sqrt(v_GreenSpectrum[leftIndex][0]*v_GreenSpectrum[leftIndex][0] + v_GreenSpectrum[leftIndex][1]*v_GreenSpectrum[leftIndex][1]);
+        amplitudeRight = std::sqrt(v_GreenSpectrum[leftIndex+1][0]*v_GreenSpectrum[leftIndex+1][0] + v_GreenSpectrum[leftIndex+1][1]*v_GreenSpectrum[leftIndex+1][1]);
+        delta = amplitudeRight - amplitudeLeft;
+        m_dcGreen = std::sqrt(v_GreenSpectrum[0][0]*v_GreenSpectrum[0][0] + v_GreenSpectrum[0][1]*v_GreenSpectrum[0][1]);
+        if(delta > 0.0)
+            m_acGreen = amplitudeLeft + delta * (rIndex - leftIndex);
+        else
+            m_acGreen = amplitudeRight + std::abs(delta) * (leftIndex + 1 - rIndex);
+
+        amplitudeLeft = std::sqrt(v_BlueSpectrum[leftIndex][0]*v_BlueSpectrum[leftIndex][0] + v_BlueSpectrum[leftIndex][1]*v_BlueSpectrum[leftIndex][1]);
+        amplitudeRight = std::sqrt(v_BlueSpectrum[leftIndex+1][0]*v_BlueSpectrum[leftIndex+1][0] + v_BlueSpectrum[leftIndex+1][1]*v_BlueSpectrum[leftIndex+1][1]);
+        delta = amplitudeRight - amplitudeLeft;
+        m_dcBlue = std::sqrt(v_BlueSpectrum[0][0]*v_BlueSpectrum[0][0] + v_BlueSpectrum[0][1]*v_BlueSpectrum[0][1]);
+        if(delta > 0.0)
+            m_acBlue = amplitudeLeft + delta * (rIndex - leftIndex);
+        else
+            m_acBlue = amplitudeRight + std::abs(delta) * (leftIndex + 1 - rIndex);
+
         //m_SPO2 = (acRed * dcBlue)/(acBlue*dcRed);
-        /*m_SPO2 = ((0.93 + 1.0 * (acRed * dcBlue)/(acBlue*dcRed)) + m_SPO2) / 2.0;
-        if(m_SPO2 > 0.98)
-            m_SPO2 = 0.98;*/
-        m_SPO2 = (acRed * dcBlue)/(acBlue*dcRed);
-        m_SPO2 = std::log(acBlue)/std::log(acRed);
-        emit spO2Updated(m_SPO2);
-
+        //m_SPO2 = std::log(acBlue)/std::log(acRed);
+        //emit spO2Updated(m_SPO2);
     }
 }
 

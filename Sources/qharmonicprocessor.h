@@ -25,17 +25,17 @@
 
 #define BOTTOM_LIMIT 1.25 // in s^-1, it is 75 bpm
 #define TOP_LIMIT 3.25 // in s^-1, it is 195 bpm
-#define SNR_TRESHOLD 4.0 // in most cases this value is suitable when (m_BufferLength == 256)
+#define SNR_TRESHOLD 3.0 // in most cases this value is suitable when (m_BufferLength == 256)
 #define HALF_INTERVAL 2 // defines the number of averaging indexes when frequency is evaluated, this value should be >= 1
 #define DIGITAL_FILTER_LENGTH 5 // in counts
 
 #define BREATH_TOP_LIMIT 1.0 // in s^-1, it is 60 rpm
 #define BREATH_BOTTOM_LIMIT 0.25 // in s^-1, it is 15 rpm
 #define BREATH_HALF_INTERVAL 2 // it will be (value * 2 + 1)
-#define BREATH_SNR_TRESHOLD 4.0
+#define BREATH_SNR_TRESHOLD 3.0
 
 #define PRUNING_SKO_COEFF 3
-#define DEFAULT_NORMALIZATION_INTERVAL 13
+#define DEFAULT_NORMALIZATION_INTERVAL 10
 #define DEFAULT_BREATH_NORMALIZATION_INTERVAL 15
 #define DEFAULT_BREATH_AVERAGE 13
 #define DEFAULT_BREATH_STROBE 3
@@ -72,7 +72,7 @@ signals:
     void breathRateUpdated(qreal freq_value, qreal snr_value);
     void breathTooNoisy(qreal snr_value);
     void breathSnrUpdated(quint32 id, qreal snr_value);
-    void measurementsUpdated(qreal heart_rate, qreal heart_snr, qreal breath_rate, qreal breath_snr, qreal spo2);
+    void measurementsUpdated(qreal heart_rate, qreal heart_snr, qreal breath_rate, qreal breath_snr, qreal acR, qreal dcR, qreal acG, qreal dcG, qreal acB, qreal dcB);
 
     void spO2Updated(const qreal value);
 
@@ -80,7 +80,7 @@ public slots:
     void EnrollData(unsigned long red, unsigned long green, unsigned long blue, unsigned long area, double time);
     void computeHeartRate(); // computes Heart Rate by means of frequency analysis
     void computeBreathRate(); // computes Breath Rate by means of frequency analysis
-    void computeSPO2(quint16 index); // computes SPO2 by means of frequency analysis and ratio of the ration method
+    void computeSPO2(qreal rIndex); // computes SPO2 by means of frequency analysis and ratio of the ration method
     void CountFrequency(); //simple time domain algorithm for HeartRate evaluation, not very accurate
     void setPCAMode(bool value); // controls PCA alignment
     void switchColorMode(int value); // controls colors enrollment
@@ -162,7 +162,17 @@ private:
     fftw_plan m_RedPlan;
     fftw_complex *v_RedSpectrum;
     qreal *v_RedForFFT;
+    fftw_plan m_GreenPlan;
+    fftw_complex *v_GreenSpectrum;
+    qreal *v_GreenForFFT;
     qreal m_SPO2;
+
+    qreal m_acRed;
+    qreal m_acBlue;
+    qreal m_acGreen;
+    qreal m_dcRed;
+    qreal m_dcBlue;
+    qreal m_dcGreen;
 
     bool m_pruningFlag;
 };

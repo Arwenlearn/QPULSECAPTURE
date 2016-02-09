@@ -150,7 +150,7 @@ private slots:
     void decrease_dialogSetCounter();
     void closeAllDialogs();
     void make_record_to_file(qreal signalValue, qreal meanRed, qreal meanGreen, qreal meanBlue);
-    void updateMeasurementsRecord(qreal heartRate, qreal heartSNR, qreal breathRate, qreal breathSNR, qreal spo2);
+    void updateMeasurementsRecord(qreal heartRate, qreal heartSNR, qreal breathRate, qreal breathSNR, qreal acR, qreal dcR, qreal acG, qreal dcG, qreal acB, qreal dcB);
     void updateStatus(qreal value);
 };
 //------------------------------------------------------------------------------------------------------
