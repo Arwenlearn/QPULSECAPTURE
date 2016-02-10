@@ -805,7 +805,7 @@ void QHarmonicProcessor::computeSPO2(qreal rIndex)
         int leftIndex = (int)rIndex;
         for(quint16 i = 0; i < m_BufferLength; i++)
         {
-            pos = loopBuffer(curpos - i);
+            pos = loopBuffer(curpos - 1 - i);
             v_GreenForFFT[i] = PCA_RAW_RGB(pos,1);
             v_BlueForFFT[i] = PCA_RAW_RGB(pos,2);
             v_RedForFFT[i] = PCA_RAW_RGB(pos,0);
@@ -841,9 +841,8 @@ void QHarmonicProcessor::computeSPO2(qreal rIndex)
         else
             m_acBlue = amplitudeRight + std::abs(delta) * (leftIndex + 1 - rIndex);
 
-        //m_SPO2 = (acRed * dcBlue)/(acBlue*dcRed);
-        //m_SPO2 = std::log(acBlue)/std::log(acRed);
-        //emit spO2Updated(m_SPO2);
+        m_SPO2 = (m_acRed * m_dcBlue)/(m_acBlue*m_dcRed);
+        emit spO2Updated(m_SPO2);
     }
 }
 

@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "BabyVideoMonitor"
-#define MyAppVersion "1.0.1.0"
+#define MyAppVersion "1.0.2.0"
 #define MyAppURL "https://github.com/pi-null-mezon/QPULSECAPTURE.git"
 #define MyAppExeName "BabyVideoMonitor.exe"
 
@@ -13,7 +13,7 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{C80AB4EC-F209-4861-BA98-B92BFB0ACA13}
+AppId={{26DFE1E5-8ED2-4988-85F9-8B3E60976870}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -25,7 +25,7 @@ AllowNoIcons=yes
 LicenseFile=C:\Programming\QPULSECAPTURE\LICENSE
 InfoBeforeFile=C:\Programming\QPULSECAPTURE\README.md
 InfoAfterFile=C:\Programming\QPULSECAPTURE\Resources\Docs\Show after installation.txt
-OutputDir=C:\Programming\Releases\
+OutputDir=C:\Programming\Releases
 OutputBaseFilename={#MyAppName}_v{#MyAppVersion}
 SetupIconFile=C:\Programming\QPULSECAPTURE\Resources\Docs\Setup.ico
 Compression=lzma
