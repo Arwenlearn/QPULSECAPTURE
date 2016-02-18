@@ -57,8 +57,8 @@ void QSettingsDialog::on_ButtonCascade_clicked()
 
 void QSettingsDialog::on_ButtonDefault_clicked()
 {
-    ui->dialDatalength->setValue(156);
-    ui->dialBufferlength->setValue(156);
+    ui->dialDatalength->setValue(200);
+    ui->dialBufferlength->setValue(200);
     ui->checkBoxCascade->setChecked(false);
     ui->lineEditCascade->setText("haarcascades/haarcascade_frontalface_alt.xml");
     ui->checkBoxVideoFile->setChecked(false);

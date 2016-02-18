@@ -23,21 +23,21 @@
 #define DEFAULT_BREATH_AVERAGE 26
 #define DEFAULT_BREATH_STROBE 3*/
 
-#define BOTTOM_LIMIT 1.25 // in s^-1, it is 75 bpm
-#define TOP_LIMIT 3.25 // in s^-1, it is 195 bpm
-#define SNR_TRESHOLD 3.0 // in most cases this value is suitable when (m_BufferLength == 256)
+#define BOTTOM_LIMIT 1.5 // in s^-1, it is 90 bpm
+#define TOP_LIMIT 3.5 // in s^-1, it is 210 bpm
+#define SNR_TRESHOLD 2.0 // in most cases this value is suitable when (m_BufferLength == 256)
 #define HALF_INTERVAL 2 // defines the number of averaging indexes when frequency is evaluated, this value should be >= 1
 #define DIGITAL_FILTER_LENGTH 5 // in counts
 
 #define BREATH_TOP_LIMIT 1.0 // in s^-1, it is 60 rpm
 #define BREATH_BOTTOM_LIMIT 0.25 // in s^-1, it is 15 rpm
 #define BREATH_HALF_INTERVAL 2 // it will be (value * 2 + 1)
-#define BREATH_SNR_TRESHOLD 3.0
+#define BREATH_SNR_TRESHOLD 4.0
 
 #define PRUNING_SKO_COEFF 3
 #define DEFAULT_NORMALIZATION_INTERVAL 10
-#define DEFAULT_BREATH_NORMALIZATION_INTERVAL 15
-#define DEFAULT_BREATH_AVERAGE 13
+#define DEFAULT_BREATH_NORMALIZATION_INTERVAL 9
+#define DEFAULT_BREATH_AVERAGE 15
 #define DEFAULT_BREATH_STROBE 3
 
 class QHarmonicProcessor : public QObject
