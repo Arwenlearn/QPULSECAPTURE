@@ -2,18 +2,18 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "BabyVideoMonitor"
-#define MyAppVersion "1.0.2.0"
+#define MyAppVersion "1.0.3.0"
 #define MyAppURL "https://github.com/pi-null-mezon/QPULSECAPTURE.git"
 #define MyAppExeName "BabyVideoMonitor.exe"
 
 #define QtLibs "C:\Qt\5.5\msvc2013\bin"
-#define OpencvLibs "C:\Programming\3rdParties\opencv300\build\x86\vc12\bin"
+#define OpencvLibs "C:\Programming\3rdParties\opencv310\build\x86\vc12\bin"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{26DFE1E5-8ED2-4988-85F9-8B3E60976870}
+AppId={{CFEE5223-8B93-44F3-B4D5-A189B5EEF7C7}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -62,14 +62,14 @@ Source: "{#QtLibs}\..\plugins\mediaservice\wmfengine.dll"; DestDir: "{app}\media
 Source: "C:\Programming\QPULSECAPTURE\Resources\normal_heart_rate_at_rest.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Programming\3rdParties\WVCF_utility.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Programming\3rdParties\FFTW\fftw3-32\libfftw3-3.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#OpencvLibs}\opencv_core300.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#OpencvLibs}\opencv_ffmpeg300.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#OpencvLibs}\opencv_highgui300.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#OpencvLibs}\opencv_imgproc300.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#OpencvLibs}\opencv_objdetect300.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#OpencvLibs}\opencv_videoio300.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#OpencvLibs}\opencv_ml300.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#OpencvLibs}\opencv_imgcodecs300.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#OpencvLibs}\opencv_core310.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#OpencvLibs}\opencv_ffmpeg310.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#OpencvLibs}\opencv_highgui310.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#OpencvLibs}\opencv_imgproc310.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#OpencvLibs}\opencv_objdetect310.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#OpencvLibs}\opencv_videoio310.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#OpencvLibs}\opencv_ml310.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#OpencvLibs}\opencv_imgcodecs310.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#OpencvLibs}\..\..\..\..\sources\data\haarcascades\haarcascade_frontalface_alt.xml"; DestDir: "{app}\haarcascades"; Flags: ignoreversion
 Source: "{#OpencvLibs}\..\..\..\..\sources\data\lbpcascades\lbpcascade_frontalface.xml"; DestDir: "{app}\haarcascades"; Flags: ignoreversion
 Source: "C:\Programming\QPULSECAPTURE\Resources\Docs\Translation_Rus.qm"; DestDir: "{app}"; Flags: ignoreversion; Languages: "Russian"
