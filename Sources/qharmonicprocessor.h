@@ -29,16 +29,16 @@
 #define HALF_INTERVAL 2 // defines the number of averaging indexes when frequency is evaluated, this value should be >= 1
 #define DIGITAL_FILTER_LENGTH 5 // in counts
 
-#define BREATH_TOP_LIMIT 1.2 // in s^-1, it is 72 rpm
+#define BREATH_TOP_LIMIT 1.5 // in s^-1, it is 90 rpm
 #define BREATH_BOTTOM_LIMIT 0.3 // in s^-1, it is 18 rpm
 #define BREATH_HALF_INTERVAL 2 // it will be (value * 2 + 1)
-#define BREATH_SNR_TRESHOLD 1.5
+#define BREATH_SNR_TRESHOLD 1.0
 
 #define PRUNING_SKO_COEFF 3
 #define DEFAULT_NORMALIZATION_INTERVAL 10
 #define DEFAULT_BREATH_NORMALIZATION_INTERVAL 9
-#define DEFAULT_BREATH_AVERAGE 15
-#define DEFAULT_BREATH_STROBE 3
+#define DEFAULT_BREATH_AVERAGE 10
+#define DEFAULT_BREATH_STROBE 2
 
 class QHarmonicProcessor : public QObject
 {
